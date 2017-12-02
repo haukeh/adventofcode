@@ -10,7 +10,7 @@ object DayTwo {
 
         println(checksum(lines) { this@DayTwo.sumDiffOfMinMax(it) })
 
-        println(checksum(lines) { this@DayTwo.sumOfDivisibles(it) })
+        println(checksum(lines) { this@DayTwo.sumOfEvenlyDivisibles(it) })
     }
 
     val regex = Pattern.compile("\\s+")
@@ -23,7 +23,7 @@ object DayTwo {
 
     fun sumDiffOfMinMax(numList: List<Int>): Int = numList.max()!! - numList.min()!!
 
-    fun sumOfDivisibles(numList: List<Int>): Int = numList.mapNotNull { first ->
+    fun sumOfEvenlyDivisibles(numList: List<Int>): Int = numList.mapNotNull { first ->
         numList.find { second -> second != first && (first % second == 0) }?.let { Pair(first, it) }
     }.map { it.first / it.second }.sum()
 

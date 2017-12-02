@@ -16,6 +16,6 @@ class DayTwoTest {
     fun testPart2() {
         val input = listOf("5 9 2 8", "9 4 7 3", "3 8 6 5")
 
-        assertEquals(DayTwo.checksum(input) { DayTwo.sumOfDivisibles(it) }, 9)
+        assertEquals(DayTwo.checksum(input) { DayTwo.sumOfEvenlyDivisibles(it) }, 9)
     }
 }
