@@ -25,6 +25,6 @@ object DayTwo {
 
     fun sumOfEvenlyDivisibles(numList: List<Int>): Int = numList.mapNotNull { first ->
         numList.find { second -> second != first && (first % second == 0) }?.let { Pair(first, it) }
-    }.map { it.first / it.second }.sum()
+    }.map { it.first / it.second }.first()
 
 }
