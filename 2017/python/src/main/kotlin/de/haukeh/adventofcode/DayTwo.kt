@@ -1,4 +1,4 @@
-package de.hauke.adventofcode
+package de.haukeh.adventofcode
 
 import java.io.File
 import java.util.regex.Pattern
@@ -8,9 +8,9 @@ object DayTwo {
     fun main(args: Array<String>) {
         val lines = File("${System.getProperty("user.home")}/Desktop/in.txt").readLines()
 
-        println(checksum(lines) { this@DayTwo.sumDiffOfMinMax(it) })
+        println(checksum(lines) { sumDiffOfMinMax(it) })
 
-        println(checksum(lines) { this@DayTwo.sumOfEvenlyDivisibles(it) })
+        println(checksum(lines) { sumOfEvenlyDivisibles(it) })
     }
 
     val regex = Pattern.compile("\\s+")

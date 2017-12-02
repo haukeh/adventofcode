@@ -1,4 +1,4 @@
-package de.hauke.adventofcode
+package de.haukeh.adventofcode
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

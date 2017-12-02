@@ -1,4 +1,4 @@
-package de.hauke.adventofcode
+package de.haukeh.adventofcode
 
 import java.io.File
 
