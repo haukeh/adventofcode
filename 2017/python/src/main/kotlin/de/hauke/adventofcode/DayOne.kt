@@ -9,7 +9,6 @@ object DayOne {
 
         println("Part1: ${solveCaptcha(inputString, 1)}")
         println("Part2: ${solveCaptcha(inputString, inputString.length / 2)}")
-
     }
 
     fun solveCaptcha(input: String, offset: Int): Int {
