@@ -16,9 +16,9 @@ class Particle:
         self.p[1] += self.v[1]
         self.p[2] += self.v[2]
 
-    def key(self):
-        return ''.join(str(x) for x in self.p).join(
-            str(x) for x in self.v).join(str(x) for x in self.a)
+    def __str__(self) -> str:
+        return '[{3}] p: {0}, v: {1}, a: {2}'.format(self.p, self.v, self.a,
+                                                     self.id)
 
 
 def parse(idx, line):
