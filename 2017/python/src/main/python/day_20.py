@@ -10,7 +10,6 @@ class Particle:
 
     def step(self):
         for i in range(3):
-            print(i)
             self.v[i] += self.a[i]
             self.p[i] += self.v[i]
 
