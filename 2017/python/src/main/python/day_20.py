@@ -9,12 +9,10 @@ class Particle:
         self.a = a
 
     def step(self):
-        self.v[0] += self.a[0]
-        self.v[1] += self.a[1]
-        self.v[2] += self.a[2]
-        self.p[0] += self.v[0]
-        self.p[1] += self.v[1]
-        self.p[2] += self.v[2]
+        for i in range(3):
+            print(i)
+            self.v[i] += self.a[i]
+            self.p[i] += self.v[i]
 
     def __str__(self) -> str:
         return '[{3}] p: {0}, v: {1}, a: {2}'.format(self.p, self.v, self.a,
