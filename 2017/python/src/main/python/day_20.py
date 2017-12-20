@@ -1,0 +1,61 @@
+from collections import defaultdict
+
+
+class Particle:
+    def __init__(self, id, p, v, a):
+        self.id = id
+        self.p = p
+        self.v = v
+        self.a = a
+
+    def step(self):
+        self.v[0] += self.a[0]
+        self.v[1] += self.a[1]
+        self.v[2] += self.a[2]
+        self.p[0] += self.v[0]
+        self.p[1] += self.v[1]
+        self.p[2] += self.v[2]
+
+    def key(self):
+        return ''.join(str(x) for x in self.p).join(
+            str(x) for x in self.v).join(str(x) for x in self.a)
+
+
+def parse(idx, line):
+    parts = line.split()
+    res = []
+    for part in parts:
+        res.append([int(sub) for sub in
+                    part[part.index('<') + 1:part.index('>')].split(',')])
+
+    return Particle(idx, p=res[0], v=res[1], a=res[2])
+
+
+with open('../resources/day20.input') as f:
+    particles = [parse(i, l) for i, l in enumerate(f)]
+
+    for i in range(0, 40):
+        for ptcl in particles:
+            ptcl.step()
+
+        nxt = []
+        groups = defaultdict(list)
+        for ptcl in particles:
+            groups[tuple(ptcl.p)].append(ptcl)
+
+        for k, v in groups.items():
+            if len(v) == 1:
+                nxt.extend(v)
+
+        particles = nxt
+
+    print(len(particles))
+
+    # PART 1:
+    #
+    # particles.sort(key=lambda particle: (
+    #     math.fsum(map(abs, particle.a)), math.fsum(map(abs, particle.v)),
+    #     math.fsum(map(abs, particle.p))))
+    #
+    # for i in range(0, 10):
+    #     print(particles[i])
