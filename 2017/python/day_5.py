@@ -1,5 +1,5 @@
 def jumper(func):
-    with open("../resources/day5.input") as f:
+    with open("in/day5.input") as f:
         jumps = [int(line.rstrip()) for line in f]
     next_pos = 0
     jump_counter = 0
