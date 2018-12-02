@@ -58,15 +58,6 @@ func findCommonLetters(input []string) string {
 }
 
 func findIndexesOfCorrectBoxes(input []string) (int, int) {
-	maxItemLen := 0
-	for _, e := range input {
-		if len(e) > maxItemLen {
-			maxItemLen = len(e)
-		}
-	}
-
-	println(maxItemLen)
-
 	for i1, w1 := range input {
 		for i2, w2 := range input {
 			if w2 == w1 {
@@ -75,7 +66,7 @@ func findIndexesOfCorrectBoxes(input []string) (int, int) {
 			diffs := 0
 			r1 := []rune(w1)
 			r2 := []rune(w2)
-			for i := 0; i < maxItemLen && diffs < 2; i++ {
+			for i := 0; i < 26 && diffs < 2; i++ {
 				if r1[i] != r2[i] {
 					diffs++
 				}
