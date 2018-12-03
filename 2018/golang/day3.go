@@ -2,15 +2,18 @@ package main
 
 import (
 	"github.com/haukeh/aoc2018/util"
+	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
+
 	input := util.ReadStringPerLine("in/day3a.txt")
 	rectangles := parseRecs(input)
-	grid := make(map[point]int, 1000)
-
+	grid := make(map[point]int, 500000)
 	for _, rec := range rectangles {
 		for x := rec.x; x < rec.x+rec.w; x++ {
 			for y := rec.y; y < rec.y+rec.h; y++ {
@@ -40,6 +43,8 @@ func main() {
 			println(rec.Num)
 		}
 	}
+
+	log.Printf("Runtime: %s", time.Since(start))
 }
 
 type point struct {
