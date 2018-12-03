@@ -52,8 +52,8 @@ type point struct {
 }
 
 type rec struct {
-	Num  string
-	x, y int
+	Num string
+	point
 	w, h int
 }
 
@@ -71,11 +71,10 @@ func parseRecs(input []string) []rec {
 		w, _ := strconv.Atoi(dims[0])
 		h, _ := strconv.Atoi(dims[1])
 		r := rec{
-			Num: n,
-			x:   x,
-			y:   y,
-			w:   w,
-			h:   h,
+			Num:   n,
+			point: point{x: x, y: y},
+			w:     w,
+			h:     h,
 		}
 		recs = append(recs, r)
 	}
