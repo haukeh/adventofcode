@@ -1,12 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/haukeh/aoc2018/util"
 	"log"
-	"strconv"
-	"strings"
 	"time"
 )
+
+type point struct {
+	x, y int
+}
+
+type rec struct {
+	num string
+	point
+	w, h int
+}
 
 func main() {
 	start := time.Now()
@@ -40,41 +49,20 @@ func main() {
 			}
 		}
 		if isOnly {
-			println(rec.Num)
+			println(rec.num)
 		}
 	}
 
 	log.Printf("Runtime: %s", time.Since(start))
 }
 
-type point struct {
-	x, y int
-}
-
-type rec struct {
-	Num string
-	point
-	w, h int
-}
-
 func parseRecs(input []string) []rec {
 	var recs []rec
 	for _, ln := range input {
-		splits := strings.FieldsFunc(ln, func(r rune) bool {
-			return r == '@' || r == ':'
-		})
-		n := strings.Trim(splits[0], " ")
-		coords := strings.Split(strings.Trim(splits[1], " "), ",")
-		x, _ := strconv.Atoi(coords[0])
-		y, _ := strconv.Atoi(coords[1])
-		dims := strings.Split(strings.Trim(splits[2], " "), "x")
-		w, _ := strconv.Atoi(dims[0])
-		h, _ := strconv.Atoi(dims[1])
-		r := rec{
-			Num:   n,
-			point: point{x: x, y: y},
-			w:     w,
-			h:     h,
+		var r rec
+		_, err := fmt.Sscanf(ln, "%s @ %d,%d: %dx%d", &r.num, &r.x, &r.y, &r.w, &r.h)
+		if err != nil {
+			log.Fatal(err)
 		}
 		recs = append(recs, r)
 	}
