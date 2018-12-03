@@ -8,7 +8,42 @@ import (
 
 func main() {
 	input := util.ReadStringPerLine("in/day3a.txt")
+	rectangles := parseRecs(input)
+	grid := make(map[point]int, 1000)
 
+	for _, rec := range rectangles {
+		for x := rec.x; x < rec.x+rec.w; x++ {
+			for y := rec.y; y < rec.y+rec.h; y++ {
+				grid[point{x: x, y: y}] += 1
+			}
+		}
+	}
+	var multi int
+	for _, v := range grid {
+		if v > 1 {
+			multi++
+		}
+	}
+
+	println(multi)
+
+	for _, rec := range rectangles {
+		isOnly := true
+		for x := rec.x; x < rec.x+rec.w && isOnly; x++ {
+			for y := rec.y; y < rec.y+rec.h && isOnly; y++ {
+				if grid[point{x: x, y: y}] != 1 {
+					isOnly = false
+				}
+			}
+		}
+		if isOnly {
+			println(rec.Num)
+		}
+	}
+}
+
+type point struct {
+	x, y int
 }
 
 type rec struct {
@@ -18,7 +53,7 @@ type rec struct {
 }
 
 func parseRecs(input []string) []rec {
-	var res []rec
+	var recs []rec
 	for _, ln := range input {
 		splits := strings.FieldsFunc(ln, func(r rune) bool {
 			return r == '@' || r == ':'
@@ -37,7 +72,7 @@ func parseRecs(input []string) []rec {
 			w:   w,
 			h:   h,
 		}
-		res = append(res, r)
+		recs = append(recs, r)
 	}
-	return res
+	return recs
 }
