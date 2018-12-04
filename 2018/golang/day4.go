@@ -103,4 +103,26 @@ func main() {
 	println(g)
 	println(maxMinute)
 	println(g * maxMinute)
+
+	guardx, minuteWithMostSleeps := partTwo(minutes)
+
+	println(guardx * minuteWithMostSleeps)
+
+}
+
+func partTwo(minutes map[string]map[int]int) (int, int) {
+	var guard int
+	var maxMin, maxTimes int
+
+	for g, shifts := range minutes {
+		for minute, times := range shifts {
+			if times > maxTimes {
+				maxMin = minute
+				maxTimes = times
+				res, _ := strconv.Atoi(g[1:])
+				guard = res
+			}
+		}
+	}
+	return guard, maxMin
 }
