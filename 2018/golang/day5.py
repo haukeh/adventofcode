@@ -1,16 +1,12 @@
 with open('in/day5a.txt') as f:
-    input = f.readline()
+    raw_in = f.readline().strip()
 
+i = 0
+while i < len(raw_in) - 1:
+    if ord(raw_in[i]) == (ord(raw_in[i + 1]) + 32) or ord(raw_in[i]) == (ord(raw_in[i + 1]) - 32):
+        raw_in = raw_in[:i] + raw_in[i + 2:]
+        i = max(0, i - 2)
+    else:
+        i = i + 1
 
-def scan(string):
-    for i, c in enumerate(input):
-        if i + 1 > len(input):
-            break
-
-        if ord(c) == (ord(input[i + 1]) + 32) or ord(c) == (ord(input[i + 1]) - 32):
-            return scan(input[:i - 1] + input[i + 1:])
-
-    return string
-
-
-print(scan(input))
+print(len(raw_in))
