@@ -13,17 +13,15 @@ object Day1 {
 
   private def input = Source.fromResource("day1_1.txt").getLines().toSeq
 
-  private def partOne(lines: Seq[String]) = {
+	private def calcFuel(value: Int): Int = value / 3 - 2
+
+  private def partOne(lines: Seq[String]) =
     lines
       .map(_.toInt)
-      .foldLeft(0) { (acc, value) =>
-        acc + calcFuel(value)
-      }
-  }
+      .map(calcFuel)
+      .sum
 
-  private def calcFuel(value: Int): Int = value / 3 - 2
-
-  private def partTwo(lines: Seq[String]) = {
+  private def partTwo(lines: Seq[String]) =
     lines
       .map(_.toInt)
       .flatMap { line =>
@@ -32,5 +30,4 @@ object Day1 {
         subcalc(calcFuel(line))
       }
       .sum
-  }
 }
