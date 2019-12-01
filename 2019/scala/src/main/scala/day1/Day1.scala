@@ -15,23 +15,20 @@ object Day1 {
 
   private def partOne(lines: Seq[String]) = {
     lines
-      .map(_.toDouble)
+      .map(_.toInt)
       .foldLeft(0) { (acc, value) =>
         acc + calcFuel(value)
       }
   }
 
-  private def calcFuel(value: Double): Int =
-    (Math.floor(value / 3.0d) - 2).toInt
+  private def calcFuel(value: Int): Int = value / 3 - 2
 
   private def partTwo(lines: Seq[String]) = {
     lines
-      .map(_.toDouble)
+      .map(_.toInt)
       .flatMap { line =>
-        def subcalc(fuel: Int): Seq[Int] = {
-          if (fuel <= 0) Nil
-          else subcalc(calcFuel(fuel.toDouble)) :+ fuel
-        }
+        def subcalc(fuel: Int): Seq[Int] =
+          if (fuel <= 0) Nil else subcalc(calcFuel(fuel)) :+ fuel
         subcalc(calcFuel(line))
       }
       .sum
