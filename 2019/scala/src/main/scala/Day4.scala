@@ -1,5 +1,3 @@
-package day1
-
 object Day4 {
 
   def isValid(num: Int): Boolean = {

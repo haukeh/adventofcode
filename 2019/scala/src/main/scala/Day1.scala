@@ -1,5 +1,3 @@
-package day1
-
 import scala.io.Source
 
 object Day1 {
