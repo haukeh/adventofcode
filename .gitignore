@@ -1,0 +1,13 @@
+target
+.idea
+.bsp
+*.iml
+.bloop
+.metals
+
+*.so
+*.dylib
+*.test
+*.out
+
+venv/
