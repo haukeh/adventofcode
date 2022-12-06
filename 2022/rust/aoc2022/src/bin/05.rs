@@ -42,7 +42,7 @@ fn part1(mut grid: Vec<Vec<char>>, instr: &Vec<Instr>) -> Vec<Vec<char>> {
     for Instr(amount, from, to) in instr {
         for _ in 0..*amount {
             let x = grid[from - 1].pop().unwrap();
-            grid[to - 1].push(x);
+            grid[to - 1].resize()push(x);
         }
     }
     grid
