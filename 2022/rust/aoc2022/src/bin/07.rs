@@ -45,25 +45,33 @@ fn main() {
                     .parse::<usize>()
                     .unwrap();
                 let _ = stack.borrow().iter().fold("".to_string(), |acc, x| {
-                    let p = format!("{}/{}", acc, x);
+                    let p = if acc == "/" {
+                        acc
+                    } else {
+                        format!("{}/{}", acc, x)
+                    };
                     let mut si = sizes.borrow_mut();
                     println!("{}", p);
                     *si.entry(p.to_string()).or_default() += size;
                     p
-                });                
+                });
             }
         }
     }
-    
+
     let s = sizes.borrow();
     let dirs = s.iter().filter(|(_, &v)| v <= 100_000).collect::<Vec<_>>();
     let p1 = dirs.iter().map(|(_, &v)| v).sum::<usize>();
 
-    let root_size = s.get("//").unwrap();
+    let root_size = s.get("/").unwrap();
     println!("{}", root_size);
 
-    let p2 = s.iter().filter(|(_, &v)| v != 0 && ((70000000 - 30000000) + v >= *root_size)).map(|(_, &v)| v).min().unwrap();
-
+    let p2 = s
+        .iter()
+        .filter(|(_, &v)| v != 0 && ((70000000 - 30000000) + v >= *root_size))
+        .map(|(_, &v)| v)
+        .min()
+        .unwrap();
 
     println!("{:?}", p1);
     println!("{:?}", p2);
