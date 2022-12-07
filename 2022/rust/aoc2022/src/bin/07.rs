@@ -1,10 +1,11 @@
-use std::{collections::HashMap, fs, rc::Rc, cell::RefCell};
+use std::{cell::RefCell, collections::HashMap, fs, rc::Rc};
+
+use itertools::Itertools;
 
 fn main() {
     let input = fs::read_to_string("input/07").unwrap();
-    let stack:  Rc<RefCell<Vec<String>>> = Rc::new(RefCell::new(Vec::new()));
+    let stack: Rc<RefCell<Vec<String>>> = Rc::new(RefCell::new(Vec::new()));
     let sizes: Rc<RefCell<HashMap<String, usize>>> = Rc::new(RefCell::new(HashMap::new()));
-    let children: Rc<RefCell<HashMap<String, Vec<String>>>> = Rc::new(RefCell::new(HashMap::new()));
 
     for line in input.lines() {
         if line.starts_with("$") {
@@ -29,10 +30,13 @@ fn main() {
             }
         } else {
             if line.starts_with("dir") {
-                let d = line.chars().skip(4).take_while(|c| !c.is_whitespace()).collect::<String>();
-                if let Some(current) = stack.borrow().last() {
-                    children.borrow_mut().entry(current.to_string()).or_default().push(d);
-                }
+                let d = line
+                    .chars()
+                    .skip(4)
+                    .take_while(|c| !c.is_whitespace())
+                    .collect::<String>();
+                let path = stack.borrow().iter().join("/");
+                sizes.borrow_mut().insert(path, 0);
             } else {
                 let size = line
                     .chars()
@@ -40,25 +44,27 @@ fn main() {
                     .collect::<String>()
                     .parse::<usize>()
                     .unwrap();
-                    
-                for dir in stack.borrow().iter() {                
-                    let d = String::from(dir);
-                    let mut s = sizes.borrow_mut();
-                    let e = s.entry(d).or_default();
-                    *(e) += size;
-                }
+                let _ = stack.borrow().iter().fold("".to_string(), |acc, x| {
+                    let p = format!("{}/{}", acc, x);
+                    let mut si = sizes.borrow_mut();
+                    println!("{}", p);
+                    *si.entry(p.to_string()).or_default() += size;
+                    p
+                });                
             }
         }
     }
-    println!("{:?}", sizes);
+    
     let s = sizes.borrow();
     let dirs = s.iter().filter(|(_, &v)| v <= 100_000).collect::<Vec<_>>();
+    let p1 = dirs.iter().map(|(_, &v)| v).sum::<usize>();
 
-    println!("{:?}", dirs);
+    let root_size = s.get("//").unwrap();
+    println!("{}", root_size);
 
-    let sum = dirs.iter().map(|(_, &v)| v).sum::<usize>();
-    
+    let p2 = s.iter().filter(|(_, &v)| v != 0 && ((70000000 - 30000000) + v >= *root_size)).map(|(_, &v)| v).min().unwrap();
 
-    println!("{:?}", sum)
+
+    println!("{:?}", p1);
+    println!("{:?}", p2);
 }
-
