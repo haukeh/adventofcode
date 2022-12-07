@@ -45,8 +45,8 @@ fn main() {
                     .parse::<usize>()
                     .unwrap();
                 let _ = stack.borrow().iter().fold("".to_string(), |acc, x| {
-                    let p = if acc == "/" {
-                        acc
+                    let p = if x == "/" {
+                        x.to_string()
                     } else {
                         format!("{}/{}", acc, x)
                     };
