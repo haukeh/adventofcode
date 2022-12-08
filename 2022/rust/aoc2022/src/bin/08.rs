@@ -1,106 +1,57 @@
-use itertools::Itertools;
-use std::{collections::{HashMap, }, ops::Range};
+use std::{cmp::max, collections::HashMap};
 
 fn main() {
-    let lines = include_str!("../../input/08").split("\n").collect_vec();
+    let lines = include_str!("../../input/08").split('\n');
     let mut grid: HashMap<(usize, usize), u32> = HashMap::new();
 
-    for (y, l) in lines.iter().enumerate() {
+    for (y, l) in lines.enumerate() {
         for (x, c) in l.chars().enumerate() {
             grid.insert((x, y), c.to_digit(10).unwrap());
         }
     }
 
-    let max_y = lines.len();
-    let max_x = lines.first().map(|l| l.bytes().len()).unwrap();
-
-    let grid = grid;
-
-    let p1 = grid
+    let (p1, p2) = grid
         .iter()
-        .filter(|&(&pos, &h)| is_visible(pos, h, max_x, max_y, &grid))
-        .collect_vec()
-        .len();
-
-    let p2 = grid
-        .iter()
-        .map(|(&pos, &h)| score(pos, h, max_x, max_y, &grid))
-        .max()
-        .unwrap();
-    
+        .map(|(&pos, &h)| traverse(pos, h, &grid))
+        .fold((0, 0), |(p1, p2), (visible, score)| {
+            (p1 + visible as usize, max(p2, score))
+        });
 
     println!("{}", p1);
     println!("{}", p2);
 }
 
-fn measure(grid: &HashMap<(usize, usize), u32>, rng: impl Iterator<Item=(usize, usize)>, height: u32) -> usize {
-    let mut ll = 0;
-    for pos in rng {
-        if let Some(&t) = grid.get(&pos) {
-            ll += 1;
-            if t >= height {
+fn traverse(
+    (x, y): (usize, usize),
+    height: u32,
+    grid: &HashMap<(usize, usize), u32>,
+) -> (bool, usize) {
+    let mut invisible = true;
+    let mut score = 1;
+
+    for (dx, dy) in [(-1, 0), (0, -1), (1, 0), (0, 1)] {
+        let mut x = add_as_isize(x, dx);
+        let mut y = add_as_isize(y, dy);
+        let mut visible = true;
+        let mut smaller_trees = 0;
+        while let Some(&other) = grid.get(&(x, y)) {
+            smaller_trees += 1;
+            if other >= height {
+                visible = false;
                 break;
             }
+            x = add_as_isize(x, dx);
+            y = add_as_isize(y, dy);
         }
+        if visible {
+            invisible = false;
+        }
+        score *= smaller_trees;
     }
-    ll
+
+    (!invisible, score)
 }
 
-fn score(
-    (x, y): (usize, usize),
-    height: u32,
-    max_x: usize,
-    max_y: usize,
-    grid: &HashMap<(usize, usize), u32>,
-) -> usize {
-    println!("{:?}", (x, y));
-    let res = if x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1 {
-        0
-    } else {
-        let left = measure(grid, (0..x).rev().map(|x| (x, y)), height);
-        let right = measure(grid, (x + 1..max_x).map(|x| (x, y)), height);
-        let top = measure(grid, (0..y).rev().map(|y| (x, y)), height);
-        let bottom = measure(grid, (y + 1..max_y).map(|y| (x, y)), height);
-        
-        left * right * top * bottom
-    };
-
-    res
-}
-
-fn is_visible(
-    (x, y): (usize, usize),
-    height: u32,
-    max_x: usize,
-    max_y: usize,
-    grid: &HashMap<(usize, usize), u32>,
-) -> bool {
-    let res = if x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1 {
-        true
-    } else {
-        let mut left = (0..x)
-            .map(|idx| *grid.get(&(idx, y)).unwrap())
-            .collect::<Vec<_>>();
-        let mut right = (x + 1..max_x)
-            .map(|idx| *grid.get(&(idx, y)).unwrap())
-            .collect::<Vec<_>>();
-        let mut top = (0..y)
-            .map(|idx| *grid.get(&(x, idx)).unwrap())
-            .collect::<Vec<_>>();
-        let mut bottom = (y + 1..max_y)
-            .map(|idx| *grid.get(&(x, idx)).unwrap())
-            .collect::<Vec<_>>();
-
-        let visible_left = left.iter().find(|&item| item >= &height).is_none();
-        let visible_right = right.iter().find(|&item| item >= &height).is_none();
-        let visible_top = top.iter().find(|&item| item >= &height).is_none();
-        let visible_bottom = bottom.iter().find(|&item| item >= &height).is_none();
-
-        let visible_horizontal = visible_left || visible_right;
-        let visible_vertical = visible_top || visible_bottom;
-
-        visible_horizontal || visible_vertical
-    };
-
-    res
+fn add_as_isize(a: usize, b: isize) -> usize {
+    (a as isize + b) as usize
 }
