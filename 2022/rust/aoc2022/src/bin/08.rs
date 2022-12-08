@@ -1,8 +1,8 @@
 use itertools::Itertools;
-use std::collections::HashMap;
+use std::{collections::{HashMap, }, ops::Range};
 
 fn main() {
-    let lines = include_str!("../../input/08_t").split("\n").collect_vec();
+    let lines = include_str!("../../input/08").split("\n").collect_vec();
     let mut grid: HashMap<(usize, usize), u32> = HashMap::new();
 
     for (y, l) in lines.iter().enumerate() {
@@ -12,18 +12,60 @@ fn main() {
     }
 
     let max_y = lines.len();
-    let max_x = grid.keys().map(|(x, _)| *x).max().unwrap();
+    let max_x = lines.first().map(|l| l.bytes().len()).unwrap();
 
     let grid = grid;
 
-    println!("{:?}", grid);
-
-    let visible = grid
+    let p1 = grid
         .iter()
         .filter(|&(&pos, &h)| is_visible(pos, h, max_x, max_y, &grid))
-        .collect_vec();
+        .collect_vec()
+        .len();
 
-    println!("{:?}", visible.len());
+    let p2 = grid
+        .iter()
+        .map(|(&pos, &h)| score(pos, h, max_x, max_y, &grid))
+        .max()
+        .unwrap();
+    
+
+    println!("{}", p1);
+    println!("{}", p2);
+}
+
+fn measure(grid: &HashMap<(usize, usize), u32>, rng: impl Iterator<Item=(usize, usize)>, height: u32) -> usize {
+    let mut ll = 0;
+    for pos in rng {
+        if let Some(&t) = grid.get(&pos) {
+            ll += 1;
+            if t >= height {
+                break;
+            }
+        }
+    }
+    ll
+}
+
+fn score(
+    (x, y): (usize, usize),
+    height: u32,
+    max_x: usize,
+    max_y: usize,
+    grid: &HashMap<(usize, usize), u32>,
+) -> usize {
+    println!("{:?}", (x, y));
+    let res = if x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1 {
+        0
+    } else {
+        let left = measure(grid, (0..x).rev().map(|x| (x, y)), height);
+        let right = measure(grid, (x + 1..max_x).map(|x| (x, y)), height);
+        let top = measure(grid, (0..y).rev().map(|y| (x, y)), height);
+        let bottom = measure(grid, (y + 1..max_y).map(|y| (x, y)), height);
+        
+        left * right * top * bottom
+    };
+
+    res
 }
 
 fn is_visible(
@@ -33,23 +75,32 @@ fn is_visible(
     max_y: usize,
     grid: &HashMap<(usize, usize), u32>,
 ) -> bool {
-    if x == 0 || x == max_x || y == 0 || y == max_y {
-        println!("({},{}) ({}) is visible", x, y, height);
-        return true;
-    }
-    for xx in 0..max_x {
-        if *grid.get(&(xx, y)).unwrap() > height {
-            println!("({},{}) ({}) is not visible", x, y, height);
-            return false;
-        }
-    }
-    for yy in 0..max_y {
-        if *grid.get(&(x, yy)).unwrap() > height {
-            println!("({},{}) ({}) is not visible", x, y, height);
-            return false;
-        }
-    }
+    let res = if x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1 {
+        true
+    } else {
+        let mut left = (0..x)
+            .map(|idx| *grid.get(&(idx, y)).unwrap())
+            .collect::<Vec<_>>();
+        let mut right = (x + 1..max_x)
+            .map(|idx| *grid.get(&(idx, y)).unwrap())
+            .collect::<Vec<_>>();
+        let mut top = (0..y)
+            .map(|idx| *grid.get(&(x, idx)).unwrap())
+            .collect::<Vec<_>>();
+        let mut bottom = (y + 1..max_y)
+            .map(|idx| *grid.get(&(x, idx)).unwrap())
+            .collect::<Vec<_>>();
 
-    println!("({},{}) ({}) is visible", x, y, height);
-    true
+        let visible_left = left.iter().find(|&item| item >= &height).is_none();
+        let visible_right = right.iter().find(|&item| item >= &height).is_none();
+        let visible_top = top.iter().find(|&item| item >= &height).is_none();
+        let visible_bottom = bottom.iter().find(|&item| item >= &height).is_none();
+
+        let visible_horizontal = visible_left || visible_right;
+        let visible_vertical = visible_top || visible_bottom;
+
+        visible_horizontal || visible_vertical
+    };
+
+    res
 }
