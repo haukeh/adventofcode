@@ -1,14 +1,6 @@
 import copy
 import math
 from collections import defaultdict
-from enum import Enum
-
-
-class Op(Enum):
-    ADD = 1,
-    MUL = 2,
-    ADD_SELF = 3,
-    MUL_SELF = 4
 
 
 class Monkey:
