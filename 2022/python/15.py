@@ -17,16 +17,18 @@ for (sensor, beacon) in items:
     G[sensor] = 'S'
     G[beacon] = 'B'
 
+row = 2000000
+
 for (sensor, beacon) in items: 
     distance = taxicab(sensor, beacon)
     print(f'{sensor} and {beacon} have distane {distance}')
-    for dir in [(0, 1), (1, 0), (-1, 0), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]:
-        for i in range(0, distance+1):
-            for j in range(0, distance + 1):
-                aa = (sensor[0] + i * dir[0], sensor[1] + j * dir[1])
-                if taxicab(aa, sensor) <= distance: 
-                    if not aa in G:
-                        G[aa] = "#"
+    
+    dir = 1 if row > sensor[1] else -1
+    for x in range(-distance, distance+1):
+        aa = (sensor[0] + x, row)
+        if taxicab(aa, sensor) <= distance: 
+            if not aa in G:
+                G[aa] = "#"
     
 
 count = 0
