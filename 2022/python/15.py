@@ -16,26 +16,28 @@ def distance(a, b):
 
 # interval trick by https://www.youtube.com/watch?v=OG1QwJ2RKsU
 
-def part1():
-    G = {}
-    for (sensor, beacon) in items:
-        G[sensor] = 'S'
-        G[beacon] = 'B'
 
+def part1():
+    row = 2000000
+    intervals = []
+    beacon_xs = set()
     for (sensor, beacon) in items:
         d = distance(sensor, beacon)
-        for dir in [(0, 1), (1, 0), (-1, 0), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]:
-            for i in range(0, d + 1):
-                for j in range(0, d + 1):
-                    aa = (sensor[0] + i * dir[0], sensor[1] + j * dir[1])
-                    if distance(aa, sensor) <= d:
-                        if not aa in G:
-                            G[aa] = "#"
-    count = 0
-    for ((x, y), v) in G.items():
-        if y == 2000000 and v == '#':
-            count += 1
-    print(count)
+        offset = d - abs(sensor[1] - row)
+        min_x = sensor[0] - offset
+        max_x = sensor[0] + offset
+        if beacon[1] == row: 
+            beacon_xs.add(beacon[0])
+        intervals.append([min_x, max_x])
+
+    impossible = set()    
+
+    for min_x, max_x in intervals:
+        for x in range(min_x, max_x + 1):
+            impossible.add(x)
+    
+    print(len(impossible - beacon_xs))
+
 
 def part2():
     MAX = 4000000
