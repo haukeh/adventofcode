@@ -33,7 +33,6 @@ with open("input/03.txt") as f:
                 if sym == "*" and len(nums) == 2: 
                     p2 += nums[0] * nums[1]
                 
-    print(p1)
-    print(p2)
+    print(p1, p2)
 
 
