@@ -18,12 +18,11 @@ with open("input/04.txt") as f:
     copies = defaultdict(lambda: 1)
 
     for num, wins in cards.items():
-        if wins > 0:
-            for j in range(copies[num]):
-                for i in range(1, wins + 1):
-                    n = num + i
-                    if n in cards:
-                        copies[n] += 1
+        for j in range(copies[num]):
+            for i in range(1, wins + 1):
+                n = num + i
+                if n in cards:
+                    copies[n] += 1
 
     p2 = sum(map(lambda k: copies[k], cards.keys()))
 
