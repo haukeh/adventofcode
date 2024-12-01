@@ -21,8 +21,8 @@ fn main() -> anyhow::Result<()> {
         .sum::<u64>();
 
     let part2 = left
-        .into_iter()
-        .map(|l| l * right.iter().filter(|&&r| r == l).count() as i64)
+        .iter()
+        .map(|&l| l * right.iter().filter(|&&r| r == l).count() as i64)
         .sum::<i64>();
 
     println!("{}", part1);
