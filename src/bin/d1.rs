@@ -3,23 +3,15 @@ use itertools::{self, Itertools};
 
 fn main() -> anyhow::Result<()> {
     let lines = file_lines("input/d1.txt")?;
-    let mut left: Vec<i64> = Vec::new();
-    let mut right: Vec<i64> = Vec::new();
-
-    for line in lines {
-        let values: Vec<&str> = line.split_whitespace().map(|x| x.trim()).collect();
-        match values.as_slice() {
-            [l, r] => {
-                let numl = l.parse::<i64>()?;
-                left.push(numl);
-                let numr = r.parse::<i64>()?;
-                right.push(numr);
-            }
-            _ => {
-                panic!("error parsing lines");
-            }
-        }
-    }
+    let (left, right): (Vec<_>, Vec<_>) = lines
+        .map(|line| {
+            let (l, r) = line.split_once(' ').unwrap();
+            (
+                l.trim().parse::<i64>().unwrap(),
+                r.trim().parse::<i64>().unwrap(),
+            )
+        })
+        .unzip();
 
     let part1 = left
         .iter()
