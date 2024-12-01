@@ -1,5 +1,5 @@
 use aoc2024::file_lines;
-use itertools::{self, Itertools};
+use itertools::Itertools;
 
 fn main() -> anyhow::Result<()> {
     let lines = file_lines("input/d1.txt")?;
