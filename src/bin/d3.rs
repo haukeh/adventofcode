@@ -26,23 +26,18 @@ fn main() -> anyhow::Result<()> {
     let r = Regex::new(r"don't\(\)|do\(\)|mul\((\d+)\,(\d+)\)")?;
     let tokens: Vec<Token> = r.captures_iter(&text).map(|c| Token::parse(c)).collect();
 
-    let p1 = tokens
-        .iter()
-        .filter_map(|tok| match tok {
-            Token::Mul(a, b) => Some(a * b),
-            _ => None,
-        })
-        .sum::<i64>();
-
+    let mut p1: i64 = 0;
     let mut p2: i64 = 0;
     let mut on: bool = true;
+    
     for t in tokens.iter() {
         match t {
             Token::Do => on = true,
             Token::Dont => on = false,
             Token::Mul(a, b) => {
+                p1 += a * b;
                 if on {
-                    p2 += a * b
+                    p2 += a * b;
                 }
             }
         }
