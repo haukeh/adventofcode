@@ -13,8 +13,8 @@ impl Token {
             "do()" => Self::Do,
             "don't()" => Self::Dont,
             _ => {
-                let left_op: i64 = capture.get(1).map(|n| n.as_str().parse().unwrap()).unwrap();
-                let right_op: i64 = capture.get(2).map(|n| n.as_str().parse().unwrap()).unwrap();
+                let left_op: i64 = capture.get(1).and_then(|n| n.as_str().parse().ok()).unwrap();
+                let right_op: i64 = capture.get(2).and_then(|n| n.as_str().parse().ok()).unwrap();
                 Self::Mul(left_op, right_op)
             }
         }
