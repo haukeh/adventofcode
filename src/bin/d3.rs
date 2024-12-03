@@ -13,8 +13,14 @@ impl Token {
             "do()" => Self::Do,
             "don't()" => Self::Dont,
             _ => {
-                let left_op: i64 = capture.get(1).and_then(|n| n.as_str().parse().ok()).unwrap();
-                let right_op: i64 = capture.get(2).and_then(|n| n.as_str().parse().ok()).unwrap();
+                let left_op: i64 = capture
+                    .get(1)
+                    .and_then(|n| n.as_str().parse().ok())
+                    .unwrap();
+                let right_op: i64 = capture
+                    .get(2)
+                    .and_then(|n| n.as_str().parse().ok())
+                    .unwrap();
                 Self::Mul(left_op, right_op)
             }
         }
@@ -24,12 +30,12 @@ impl Token {
 fn main() -> anyhow::Result<()> {
     let text = file_as_string("input/d3.txt")?;
     let r = Regex::new(r"don't\(\)|do\(\)|mul\((\d+)\,(\d+)\)")?;
-    let tokens: Vec<Token> = r.captures_iter(&text).map(|c| Token::parse(c)).collect();
+    let tokens: Vec<Token> = r.captures_iter(&text).map(Token::parse).collect();
 
     let mut p1: i64 = 0;
     let mut p2: i64 = 0;
     let mut on: bool = true;
-    
+
     for t in tokens.iter() {
         match t {
             Token::Do => on = true,
