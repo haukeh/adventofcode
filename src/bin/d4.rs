@@ -51,9 +51,7 @@ fn find_x_mas(pos: (i64, i64), grid: &HashMap<(i64, i64), char>) -> usize {
 }
 
 fn find_xmas(pos: (i64, i64), grid: &HashMap<(i64, i64), char>) -> usize {
-    let mut res = 0;
-
-    for (dx, dy) in [
+    let directions = [
         (1, 0),
         (1, -1),
         (0, -1),
@@ -62,27 +60,29 @@ fn find_xmas(pos: (i64, i64), grid: &HashMap<(i64, i64), char>) -> usize {
         (-1, 1),
         (0, 1),
         (1, 1),
-    ] {
-        let mut found = true;
-        let (mut x, mut y) = pos;
-
-        for next in ['M', 'A', 'S'] {
-            x += dx;
-            y += dy;
-
-            match grid.get(&(x, y)) {
-                Some(&c) if c == next => {}
-                _ => {
-                    found = false;
-                    break;
-                }
-            }
-        }
-
-        if found {
-            res += 1;
+    ];
+ 
+    let mut found = 0;
+    for (dx, dy) in directions {
+        if is_valid(pos, dx, dy, grid) {
+            found += 1;
         }
     }
 
-    res
+    found
+}
+
+fn is_valid(pos: (i64, i64), dx: i64, dy: i64, grid: &HashMap<(i64, i64), char>) -> bool {
+    let (mut x, mut y) = pos;
+    
+    for next in ['M', 'A', 'S'] {
+        x += dx;
+        y += dy;
+        
+        if grid.get(&(x, y)) != Some(&next) {
+            return false;
+        }
+    }
+
+    return true;
 }
