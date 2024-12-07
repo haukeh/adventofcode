@@ -38,6 +38,7 @@ def solve(p2: bool):
             if res == wanted:
                 solvable.append(wanted)
                 break
+
     return solvable
 
 
