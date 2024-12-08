@@ -29,11 +29,11 @@ def solve(p2: bool):
         for ops in permutations:
             oplist = list(ops)
 
-            def reduce_func(operations, a, b):
-                op = operations.pop(0)
+            def reduce_func(a, b):
+                op = oplist.pop(0)
                 return op(a, b)
 
-            res = functools.reduce(functools.partial(reduce_func, oplist), operands, 0)
+            res = functools.reduce(reduce_func, operands)
 
             if res == wanted:
                 solvable.append(wanted)
