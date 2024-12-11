@@ -10,7 +10,6 @@ DIR = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
 
 def print_path(path):
-    
     for y, line in lines:
         ln = []
         for x, height in enumerate(line.strip()):
@@ -41,7 +40,7 @@ def find_path(pos, height, seen=set(), path=[]):
     else:
         for dx, dy in DIR:
             paths.extend(find_path((pos[0] + dx, pos[1] + dy), height + 1, seen, path))
-
+    
     seen.remove(pos)
     path.pop()
 
