@@ -1,11 +1,12 @@
 from collections import Counter
 
+
 def run(iters):
     stones = Counter([int(n) for n in open("../input/d11.txt").read().split()])
 
     for _ in range(iters):
-        counts = Counter()    
-        
+        counts = Counter()
+
         for n, cnt in stones.items():
             if n == 0:
                 counts[1] += cnt
@@ -18,10 +19,11 @@ def run(iters):
                     counts[b] += cnt
                 else:
                     counts[n * 2024] += cnt
-        
+
         stones = counts
-    
+
     return sum(counts.values())
+
 
 p1 = run(25)
 p2 = run(75)
