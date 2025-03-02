@@ -1,4 +1,4 @@
-package aoc2024;
+package de.haukeh.aoc2016;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -45,11 +45,11 @@ public class Day2 {
         out.println(p2);
     }
 
-    private static String run(Map<Point, Character> grid) throws IOException, URISyntaxException {
+    private static String run(Map<Point, Character> grid) throws IOException {
         Point currentPos = new Point(0, 0);
         var ans = new StringBuilder();
 
-        for (String line : Files.readAllLines(Path.of(Day2.class.getClassLoader().getResource("input/d2.txt").toURI()))) {
+        for (String line : Files.readAllLines(Util.inputPath(2))) {
             for (char c : line.toCharArray()) {
                 var diff = DIRS.get(c);
                 var next = currentPos.add(diff);

@@ -1,4 +1,4 @@
-package aoc2024;
+package de.haukeh.aoc2016;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ public class Day1 {
     static final Point[] DIRS = {new Point(-1, 0), new Point(0, 1), new Point(1, 0), new Point(0, -1)};
 
     public static void main(String[] args) throws IOException {
-        var input = List.of(Files.readString(Path.of("input/d1.txt")).strip().replace(" ", "").split(","));
+        var input = List.of(Files.readString(Util.inputPath(1)).strip().replace(" ", "").split(","));
 
         final Point start = new Point(0, 0);
 

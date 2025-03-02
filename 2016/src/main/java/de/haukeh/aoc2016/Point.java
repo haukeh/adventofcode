@@ -1,4 +1,4 @@
-package aoc2024;
+package de.haukeh.aoc2016;
 
 record Point(int x, int y) {
 
